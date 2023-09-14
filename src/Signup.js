@@ -1,6 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Validation from './SignupValidation'
+import axios from 'axios'
+
 
 const Signup = () => {
 
@@ -10,12 +12,23 @@ const Signup = () => {
         password:""
     })
 
+    const nav = useNavigate()
+
     const [ error, setError ]= React.useState({})
 
     function handleSubmit(e){
         e.preventDefault()
         console.log(values)
         setError(Validation(values))
+        axios.post('http://localhost:5000/signup', values)
+        .then( (msg) => {
+            console.log(msg)
+            nav('/')
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
     }
 
     function handleChange(e){
