@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Validation from './LoginValidation'
+import axios from 'axios'
 
 
 const Login = () => {
@@ -10,12 +11,26 @@ const Login = () => {
         password:""
     })
 
-    const [ error, setError ]= React.useState({})
+    const nav = useNavigate()
+
+    const [ errors, setErrors ]= React.useState({})
 
     function handleSubmit(e){
         e.preventDefault()
         console.log(values)
-        setError(Validation(values))
+        setErrors(Validation(values))
+
+        if(errors.email === "" && errors.password === ""){
+            axios.post('http://localhost:5000/signup', values)
+            .then( (msg) => {
+                console.log(msg)    
+                nav('/home')
+
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
     }
 
 
@@ -25,7 +40,7 @@ const Login = () => {
             return{
                 ...item,
                 [name]: value
-            }
+            }   
         })
     }
   return (
@@ -36,12 +51,12 @@ const Login = () => {
                 <div className='mb-3'>
                     <label htmlFor='email'>Email</label>
                     <input id='email' type='email' name="email" value={values.email} placeholder='enter email' className='form-control rounded-0' onChange={handleChange} />
-                    {error.email && <span className='text-danger'>{error.email }</span> }
+                    {errors.email && <span className='text-danger'>{errors.email }</span> }
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='password'>Password</label>
                     <input id='password' type='password' name='password' value={values.password} placeholder='enter Password' className='form-control rounded-0' onChange={handleChange} />
-                    {error.password && <span className='text-danger'>{error.password }</span> }
+                    {errors.password && <span className='text-danger'>{errors.password }</span> }
                 </div>
 
                 <button type='submit' className='btn btn-success w-100'>Log in</button>

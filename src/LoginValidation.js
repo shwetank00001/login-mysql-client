@@ -9,7 +9,7 @@ export default function Validation(values){
     }
 
     else if(!email_pattern.test(values.email)){
-        error.email = "Email didnt Match"
+        error.email = "Email did not Match"
     }else{
         error.email = ""
     }
@@ -18,9 +18,9 @@ export default function Validation(values){
     }
 
     else if(!password_pattern.test(values.password)){
-        error.email = "Password didnt Match"
+        error.email = "Password did not Match"
     }else{
-        error.email = ""
+        error.email = "Sucesss"
     }
 
     return error;
